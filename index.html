@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ᴀᴢᴇɢᴏɴ Tierlist</title>
+<style>
+  * { box-sizing: border-box; margin:0; padding:0; font-family: Inter, system-ui, sans-serif; }
+  body {
+    background:
+      radial-gradient(circle at top left, rgba(38, 78, 145, 0.18), transparent 30%),
+      radial-gradient(circle at top right, rgba(27, 104, 157, 0.12), transparent 28%),
+      linear-gradient(180deg, #07101d 0%, #091321 100%);
+    color:#e8edf7; min-height:100vh; padding:24px;
+  }
+  .app { max-width: 1600px; margin:0 auto; }
+  .navbar {
+    height:78px; background: rgba(10,18,31,0.85); border:1px solid rgba(75,104,152,0.16);
+    border-radius:22px; display:flex; align-items:center; justify-content:space-between;
+    padding:0 22px; box-shadow:0 12px 40px rgba(0,0,0,0.28); backdrop-filter: blur(14px);
+    margin-bottom:30px; gap:16px; flex-wrap:wrap;
+  }
+  .brand { display:flex; align-items:center; gap:12px; font-size:1.8rem; font-weight:900; letter-spacing:-0.04em; color:#f7c35f; text-shadow:0 2px 18px rgba(255,174,0,0.18);}
+  .brand span { font-family: 'ᴀᴢᴇɢᴏɴ', sans-serif; } /* Custom Azegon-style font */
+  .brand img { width:48px; height:48px; border-radius:12px; background: rgba(255,255,255,0.04); padding:6px; border:1px solid rgba(255,255,255,0.08);}
+  .search-box {
+    background: rgba(23,34,54,0.9); border:1px solid rgba(255,255,255,0.06);
+    border-radius:18px; padding:12px 18px; min-width:300px; color:#dbe5f3; font-size:0.96rem; outline:none;
+  }
+  .tabs { display:flex; gap:14px; flex-wrap:wrap; margin-bottom:22px; }
+  .tab {
+    min-width:118px; height:82px; border-radius:24px 24px 0 0;
+    background: rgba(10,18,31,0.78); border:1px solid rgba(75,104,152,0.16);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:8px; color:#7f8da3; font-weight:800; font-size:0.95rem; transition:0.18s ease;
+    cursor:pointer; position:relative; box-shadow: inset 0 -12px 30px rgba(255,255,255,0.015);
+  }
+  .tab.active { color:#ffffff; border-color: rgba(255,255,255,0.1); box-shadow: inset 0 -1px 0 #ffffff;}
+  .panel { background: rgba(8,15,28,0.88); border:1px solid rgba(75,104,152,0.16); border-radius:0 24px 24px 24px; padding:18px; box-shadow:0 16px 50px rgba(0,0,0,0.3); overflow:hidden;}
+  .panel-top { display:flex; justify-content:flex-start; align-items:center; margin-bottom:18px; flex-wrap:wrap; gap:12px;}
+  .info-btn {
+    background: rgba(34,51,82,0.95); color:#fff; border:1px solid rgba(255,255,255,0.06);
+    padding:12px 18px; border-radius:14px; font-weight:700; font-size:0.95rem; cursor:pointer;
+  }
+  .table-header, .player-row {
+    display:grid;
+    grid-template-columns: 2fr 0.8fr 1fr 1fr 1fr;
+    align-items:center; gap:12px; padding:8px 12px;
+  }
+  .table-header { color:#31435f; font-weight:900; font-size:0.95rem; letter-spacing:0.04em; text-transform:uppercase; }
+  .rows { display:flex; flex-direction:column; gap:12px; }
+  .player-row {
+    background: linear-gradient(180deg, rgba(15,25,42,0.95), rgba(10,18,31,0.95));
+    border:1px solid rgba(255,255,255,0.04); border-radius:20px; min-height:64px;
+    padding:12px 18px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+  }
+  .username-box { font-weight:900; font-size:1rem; border-radius:12px; padding:6px 12px; background: rgba(255,255,255,0.03); }
+  .rank-box { font-weight:700; text-align:center; }
+  @media(max-width:760px){ .table-header, .player-row { grid-template-columns:1fr; } }
+  .overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); align-items:center; justify-content:center; z-index:1000; }
+  .overlay-content { background:#0a121f; padding:24px 36px; border-radius:16px; color:#fff; font-size:1.1rem; text-align:center; }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="navbar">
+    <div class="brand">
+      <img src="dia_smp-523efa38.svg" alt="DiaSmp">
+      <span>ᴀᴢᴇɢᴏɴ Tierlist</span>
+    </div>
+    <input type="text" class="search-box" id="searchBox" placeholder="Search player..." />
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" data-mode="overall">🏆 Overall</div>
+    <div class="tab" data-mode="sword">⚔️ Sword</div>
+    <div class="tab" data-mode="smp">🟢 SMP</div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-top">
+      <button class="info-btn" id="infoBtn">ⓘ Information</button>
+    </div>
+
+    <div class="table-header">
+      <div>Username</div>
+      <div>Total Score</div>
+      <div>Region</div>
+      <div>Sword Tier</div>
+      <div>DiaSMP Tier</div>
+    </div>
+
+    <div class="rows" id="rows"></div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="overlay-content">
+    Want To Tier Test? Join <a href="https://discord.gg/zD6DkhGb5w" target="_blank" style="color:#f7c35f;">https://discord.gg/zD6DkhGb5w</a>
+  </div>
+</div>
+
+<script>
+const players = [
+  { username: "Mr_celsius", region:"AS", gamemodes:{ Sword:{score:56,tier:"HT4"}, DiaSMP:{score:2,tier:"LT4"} } },
+  { username: "NOVAL_MC", region:"AS", gamemodes:{ Sword:{score:16,tier:"HT4"} } },
+  { username: "ShifTide", region:"AS", gamemodes:{ DiaSMP:{score:8,tier:"HT4"} } },
+  { username: "Lakerekn", region:"AS", gamemodes:{ DiaSMP:{score:2,tier:"HT5"} } },
+  { username: "ryf_t", region:"AS", gamemodes:{ DiaSMP:{score:2,tier:"LT4"} } },
+  { username: "otonashizero17", region:"AS", gamemodes:{ DiaSMP:{score:2,tier:"HT5"} } },
+  { username: "cantstunslam123", region:"EU", gamemodes:{ DiaSMP:{score:3,tier:"LT5"} } },
+  { username: "PanBoid_", region:"EU", gamemodes:{ DiaSMP:{score:5,tier:"LT3"} } },
+  { username: "Superjustplayz", region:"AS", gamemodes:{ Sword:{score:0,tier:"LT5"} } }
+];
+
+const rows = document.getElementById("rows");
+const searchBox = document.getElementById("searchBox");
+const tabs = document.querySelectorAll(".tab");
+const overlay = document.getElementById("overlay");
+let currentMode = "overall";
+
+function renderRows(list) {
+  let filtered = list.map(player => {
+    if(currentMode==="overall") {
+      let totalScore = 0;
+      let SwordTier="Unranked", SMPtier="Unranked";
+      if(player.gamemodes.Sword){ totalScore+=player.gamemodes.Sword.score; SwordTier=player.gamemodes.Sword.tier; }
+      if(player.gamemodes.DiaSMP){ totalScore+=player.gamemodes.DiaSMP.score; SMPtier=player.gamemodes.DiaSMP.tier; }
+      return { username: player.username, region: player.region, totalScore:totalScore, SwordTier:SwordTier, SMPtier:SMPtier }
+    } else if(currentMode==="sword" && player.gamemodes.Sword){
+      return { username:player.username, region:player.region, totalScore:player.gamemodes.Sword.score, SwordTier:player.gamemodes.Sword.tier, SMPtier:"" }
+    } else if(currentMode==="smp" && player.gamemodes.DiaSMP){
+      return { username:player.username, region:player.region, totalScore:player.gamemodes.DiaSMP.score, SwordTier:"", SMPtier:player.gamemodes.DiaSMP.tier }
+    }
+    return null;
+  }).filter(p=>p);
+
+  filtered.sort((a,b)=> b.totalScore - a.totalScore);
+
+  rows.innerHTML = "";
+  filtered.forEach(player => {
+    const row = document.createElement("div");
+    row.className="player-row";
+    row.innerHTML=`
+      <div class="username-box">${player.username}</div>
+      <div class="rank-box">${player.totalScore}</div>
+      <div>${player.region}</div>
+      <div>${player.SwordTier}</div>
+      <div>${player.SMPtier}</div>
+    `;
+    rows.appendChild(row);
+  });
+}
+
+searchBox.addEventListener("input", () => {
+  const value = searchBox.value.toLowerCase();
+  const filtered = players.filter(player => player.username.toLowerCase().includes(value));
+  renderRows(filtered);
+});
+
+tabs.forEach(tab => {
+  tab.addEventListener("click", () => {
+    tabs.forEach(t=>t.classList.remove("active"));
+    tab.classList.add("active");
+    currentMode = tab.getAttribute("data-mode");
+    renderRows(players);
+  });
+});
+
+document.getElementById("infoBtn").addEventListener("click", () => { overlay.style.display="flex"; });
+overlay.addEventListener("click", () => { overlay.style.display="none"; });
+
+renderRows(players);
+</script>
+</body>
+</html>
