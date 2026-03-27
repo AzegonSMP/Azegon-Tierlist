@@ -185,6 +185,22 @@
     border-radius: 12px;
     padding: 6px 12px;
     background: rgba(255,255,255,0.03);
+    transition: 0.2s ease;
+  }
+
+  .username-box.gold-text {
+    color: #ffd84d;
+    text-shadow: 0 0 14px rgba(255, 216, 77, 0.25);
+  }
+
+  .username-box.silver-text {
+    color: #7f8c99;
+    text-shadow: 0 0 14px rgba(127, 140, 153, 0.22);
+  }
+
+  .username-box.bronze-text {
+    color: #c5976c;
+    text-shadow: 0 0 14px rgba(197, 151, 108, 0.18);
   }
 
   .rank-box {
@@ -240,8 +256,8 @@
   }
 
   .silver {
-    background: linear-gradient(135deg, rgba(212, 220, 231, 0.18), rgba(133, 145, 161, 0.14));
-    border-color: rgba(208, 215, 225, 0.18);
+    background: linear-gradient(135deg, rgba(127, 140, 153, 0.22), rgba(93, 104, 116, 0.16));
+    border-color: rgba(127, 140, 153, 0.22);
   }
 
   .bronze {
@@ -466,16 +482,23 @@ function renderTopScorers(list) {
   });
 }
 
+function getUsernameClass(index) {
+  if(index === 0) return "gold-text";
+  if(index === 1) return "silver-text";
+  if(index === 2) return "bronze-text";
+  return "";
+}
+
 function renderRows(list) {
   const filtered = getRenderedPlayers(list);
 
   rows.innerHTML = "";
 
-  filtered.forEach(player => {
+  filtered.forEach((player, index) => {
     const row = document.createElement("div");
     row.className = "player-row";
     row.innerHTML = `
-      <div class="username-box">${player.username}</div>
+      <div class="username-box ${getUsernameClass(index)}">${player.username}</div>
       <div class="rank-box">${player.totalScore}</div>
       <div>${player.region}</div>
       <div>${player.SwordTier}</div>
