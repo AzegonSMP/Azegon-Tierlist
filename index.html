@@ -37,14 +37,14 @@
   }
 
   .navbar {
-    height: 78px;
+    min-height: 78px;
     background: rgba(10,18,31,0.85);
     border: 1px solid rgba(75,104,152,0.16);
     border-radius: 22px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 22px;
+    padding: 18px 22px;
     box-shadow: 0 12px 40px rgba(0,0,0,0.28);
     backdrop-filter: blur(14px);
     margin-bottom: 30px;
@@ -61,6 +61,7 @@
     letter-spacing: -0.04em;
     color: #f7c35f;
     text-shadow: 0 2px 18px rgba(255,174,0,0.18);
+    flex: 1 1 auto;
   }
 
   .search-box {
@@ -77,8 +78,14 @@
   .tabs {
     display: flex;
     gap: 14px;
-    flex-wrap: wrap;
     margin-bottom: 22px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+    scrollbar-width: none;
+  }
+
+  .tabs::-webkit-scrollbar {
+    display: none;
   }
 
   .tab {
@@ -99,6 +106,7 @@
     cursor: pointer;
     position: relative;
     box-shadow: inset 0 -12px 30px rgba(255,255,255,0.015);
+    flex-shrink: 0;
   }
 
   .tab.active {
@@ -282,18 +290,6 @@
     border-color: rgba(181, 125, 82, 0.2);
   }
 
-  @media(max-width:1100px){
-    .main-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  @media(max-width:760px){
-    .table-header, .player-row {
-      grid-template-columns: 1fr;
-    }
-  }
-
   .overlay {
     display: none;
     position: fixed;
@@ -302,6 +298,7 @@
     align-items: center;
     justify-content: center;
     z-index: 1000;
+    padding: 20px;
   }
 
   .overlay-content {
@@ -311,6 +308,7 @@
     color: #fff;
     font-size: 1.1rem;
     text-align: center;
+    max-width: 90%;
   }
 
   .loading-overlay {
@@ -366,6 +364,120 @@
   @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+  }
+
+  /* MOBILE FIX */
+  @media (max-width: 900px) {
+    body {
+      padding: 14px;
+    }
+
+    .main-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .top-panel {
+      width: 100%;
+    }
+
+    .search-box {
+      width: 100%;
+      min-width: 0;
+    }
+
+    .brand {
+      width: 100%;
+      font-size: 1.45rem;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .navbar {
+      flex-direction: column;
+      align-items: stretch;
+      padding: 18px;
+    }
+
+    .table-header {
+      display: none;
+    }
+
+    .player-row {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 16px;
+      border-radius: 18px;
+    }
+
+    .player-row > div {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      font-size: 0.95rem;
+    }
+
+    .player-row > div::before {
+      font-weight: 800;
+      color: #7f8da3;
+      min-width: 95px;
+    }
+
+    .player-row > div:nth-child(1)::before { content: "Username"; }
+    .player-row > div:nth-child(2)::before { content: "Score"; }
+    .player-row > div:nth-child(3)::before { content: "Region"; }
+    .player-row > div:nth-child(4)::before { content: "Sword"; }
+    .player-row > div:nth-child(5)::before { content: "DiaSMP"; }
+
+    .username-box {
+      flex: 1;
+      justify-content: flex-end;
+      text-align: right;
+    }
+
+    .rank-box {
+      text-align: right;
+      width: auto;
+    }
+
+    .loading-box {
+      min-width: 0;
+      width: 90%;
+      max-width: 320px;
+    }
+
+    .overlay-content {
+      font-size: 1rem;
+      padding: 20px;
+    }
+  }
+
+  @media (max-width: 500px) {
+    .brand {
+      font-size: 1.25rem;
+    }
+
+    .tab {
+      min-width: 100px;
+      height: 72px;
+      font-size: 0.9rem;
+    }
+
+    .podium-name {
+      font-size: 1rem;
+    }
+
+    .podium-score,
+    .podium-mode {
+      font-size: 0.85rem;
+    }
+
+    .info-btn {
+      width: 100%;
+      text-align: center;
+    }
   }
 </style>
 </head>
@@ -523,7 +635,6 @@ function getRenderedPlayers(list) {
     if (b.totalScore !== a.totalScore) {
       return b.totalScore - a.totalScore;
     }
-
     return getBestTierValue(b) - getBestTierValue(a);
   });
 }
@@ -563,7 +674,6 @@ function getUsernameClass(index) {
 
 function renderRows(list) {
   const filtered = getRenderedPlayers(list);
-
   rows.innerHTML = "";
 
   filtered.forEach((player, index) => {
