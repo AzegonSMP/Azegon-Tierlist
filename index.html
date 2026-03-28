@@ -183,7 +183,7 @@
     font-weight: 900;
     font-size: 1rem;
     border-radius: 12px;
-    padding: 6px 12px;
+    padding: 10px 14px;
     background: rgba(255,255,255,0.03);
     transition: 0.2s ease;
   }
@@ -248,6 +248,23 @@
     font-size: 0.96rem;
     font-weight: 700;
     opacity: 0.92;
+    margin-bottom: 10px;
+  }
+
+  .podium-modes {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .podium-mode {
+    font-size: 0.88rem;
+    font-weight: 800;
+    opacity: 0.92;
+    padding: 8px 10px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.04);
   }
 
   .gold {
@@ -299,7 +316,7 @@
   .loading-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(6, 10, 18, 0.82);
+    background: rgba(6, 10, 18, 0.88);
     backdrop-filter: blur(18px);
     display: flex;
     align-items: center;
@@ -314,17 +331,30 @@
   }
 
   .loading-box {
-    padding: 26px 38px;
-    border-radius: 24px;
-    background: rgba(12, 18, 30, 0.88);
+    padding: 30px 40px;
+    border-radius: 28px;
+    background: rgba(12, 18, 30, 0.9);
     border: 1px solid rgba(255,255,255,0.06);
     box-shadow: 0 20px 60px rgba(0,0,0,0.35);
-    font-size: 1.25rem;
+    min-width: 280px;
+    text-align: center;
+  }
+
+  .spinner {
+    width: 52px;
+    height: 52px;
+    margin: 0 auto 18px;
+    border: 4px solid rgba(255,255,255,0.12);
+    border-top: 4px solid #f7c35f;
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+  }
+
+  .loading-text {
+    font-size: 1.2rem;
     font-weight: 800;
     color: #f3f6fc;
     letter-spacing: 0.03em;
-    min-width: 260px;
-    text-align: center;
   }
 
   .dots {
@@ -332,13 +362,21 @@
     width: 28px;
     text-align: left;
   }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
 </style>
 </head>
 <body>
 
 <div class="loading-overlay" id="loadingOverlay">
   <div class="loading-box">
-    Loading GUI<span class="dots" id="loadingDots">.</span>
+    <div class="spinner"></div>
+    <div class="loading-text">
+      Loading Tierlist<span class="dots" id="loadingDots">.</span>
+    </div>
   </div>
 </div>
 
@@ -394,10 +432,10 @@ const players = [
   { username: "Mr_celsius", region:"AS", gamemodes:{ Sword:{score:40,tier:"HT4"}, DiaSMP:{score:2,tier:"LT4"} } },
   { username: "NOVAL_MC", region:"AS", gamemodes:{ Sword:{score:16,tier:"HT4"} } },
   { username: "ShifTide", region:"AS", gamemodes:{ DiaSMP:{score:8,tier:"HT4"} } },
-  { username: "Lakerekn", region:"AS", gamemodes:{ DiaSMP:{score:2,tier:"HT5"} } },
-  { username: "ryf_t", region:"AS", gamemodes:{ DiaSMP:{score:2,tier:"LT4"} } },
-  { username: "otonashizero17", region:"AS", gamemodes:{ DiaSMP:{score:2,tier:"HT5"} } },
-  { username: "cantstunslam123", region:"EU", gamemodes:{ DiaSMP:{score:3,tier:"LT5"} } },
+  { username: "Lakerekn", region:"AS", gamemodes:{ DiaSMP:{score:0,tier:"HT5"} } },
+  { username: "ryf_t", region:"AS", gamemodes:{ DiaSMP:{score:0,tier:"LT4"} } },
+  { username: "otonashizero17", region:"AS", gamemodes:{ DiaSMP:{score:0,tier:"HT5"} } },
+  { username: "cantstunslam123", region:"EU", gamemodes:{ DiaSMP:{score:0,tier:"LT5"} } },
   { username: "Pandboid", region:"EU", gamemodes:{ DiaSMP:{score:5,tier:"LT3"} } },
   { username: "Superjustplayz", region:"AS", gamemodes:{ Sword:{score:0,tier:"LT5"} } }
 ];
@@ -412,6 +450,27 @@ const loadingDots = document.getElementById("loadingDots");
 const topScorers = document.getElementById("topScorers");
 
 let currentMode = "overall";
+
+const tierOrder = {
+  "HT1": 10,
+  "LT1": 9,
+  "HT2": 8,
+  "LT2": 7,
+  "HT3": 6,
+  "LT3": 5,
+  "HT4": 4,
+  "LT4": 3,
+  "HT5": 2,
+  "LT5": 1,
+  "Unranked": 0,
+  "": 0
+};
+
+function getBestTierValue(player) {
+  const swordTier = player.SwordTier || "Unranked";
+  const smpTier = player.SMPtier || "Unranked";
+  return Math.max(tierOrder[swordTier] || 0, tierOrder[smpTier] || 0);
+}
 
 function getRenderedPlayers(list) {
   return list.map(player => {
@@ -445,7 +504,7 @@ function getRenderedPlayers(list) {
         region: player.region,
         totalScore: player.gamemodes.Sword.score,
         SwordTier: player.gamemodes.Sword.tier,
-        SMPtier: ""
+        SMPtier: "Unranked"
       };
     }
 
@@ -454,13 +513,19 @@ function getRenderedPlayers(list) {
         username: player.username,
         region: player.region,
         totalScore: player.gamemodes.DiaSMP.score,
-        SwordTier: "",
+        SwordTier: "Unranked",
         SMPtier: player.gamemodes.DiaSMP.tier
       };
     }
 
     return null;
-  }).filter(Boolean).sort((a,b) => b.totalScore - a.totalScore);
+  }).filter(Boolean).sort((a, b) => {
+    if (b.totalScore !== a.totalScore) {
+      return b.totalScore - a.totalScore;
+    }
+
+    return getBestTierValue(b) - getBestTierValue(a);
+  });
 }
 
 function renderTopScorers(list) {
@@ -471,12 +536,19 @@ function renderTopScorers(list) {
   topScorers.innerHTML = "";
 
   top3.forEach((player, index) => {
+    const swordTier = player.SwordTier || "Unranked";
+    const smpTier = player.SMPtier || "Unranked";
+
     const card = document.createElement("div");
     card.className = `podium-card ${classes[index]}`;
     card.innerHTML = `
       <div class="podium-rank">${labels[index]}</div>
       <div class="podium-name">${player.username}</div>
       <div class="podium-score">Score: ${player.totalScore}</div>
+      <div class="podium-modes">
+        <div class="podium-mode">${swordTier} Sword</div>
+        <div class="podium-mode">${smpTier} SMP</div>
+      </div>
     `;
     topScorers.appendChild(card);
   });
@@ -537,15 +609,16 @@ overlay.addEventListener("click", () => {
 
 renderRows(players);
 
-// Loading animation dots
+// Dots animation lasts 1.6 sec total
 const dotFrames = [".", "..", "..."];
 let dotIndex = 0;
 
 const dotInterval = setInterval(() => {
   loadingDots.textContent = dotFrames[dotIndex];
   dotIndex = (dotIndex + 1) % dotFrames.length;
-}, 300);
+}, 533);
 
+// Overlay lasts 1.8 sec total
 window.addEventListener("load", () => {
   setTimeout(() => {
     clearInterval(dotInterval);
