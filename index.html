@@ -366,7 +366,6 @@
     100% { transform: rotate(360deg); }
   }
 
-  /* MOBILE FIX */
   @media (max-width: 900px) {
     body {
       padding: 14px;
@@ -544,12 +543,13 @@ const players = [
   { username: "Mr_celsius", region:"AS", gamemodes:{ Sword:{score:40,tier:"HT4"}, DiaSMP:{score:2,tier:"LT4"} } },
   { username: "NOVAL_MC", region:"AS", gamemodes:{ Sword:{score:16,tier:"HT4"} } },
   { username: "ShifTide", region:"AS", gamemodes:{ DiaSMP:{score:8,tier:"HT4"} } },
+  { username: "Pandboid", region:"EU", gamemodes:{ DiaSMP:{score:7,tier:"LT3"} } },
   { username: "Lakerekn", region:"AS", gamemodes:{ DiaSMP:{score:0,tier:"HT5"} } },
   { username: "ryf_t", region:"AS", gamemodes:{ DiaSMP:{score:0,tier:"LT4"} } },
   { username: "otonashizero17", region:"AS", gamemodes:{ DiaSMP:{score:0,tier:"HT5"} } },
   { username: "cantstunslam123", region:"EU", gamemodes:{ DiaSMP:{score:0,tier:"LT5"} } },
-  { username: "Pandboid", region:"EU", gamemodes:{ DiaSMP:{score:5,tier:"LT3"} } },
-  { username: "Superjustplayz", region:"AS", gamemodes:{ Sword:{score:0,tier:"LT5"} } }
+  { username: "Superjustplayz", region:"AS", gamemodes:{ Sword:{score:0,tier:"LT5"} } },
+  { username: "datminecrafter1", region:"EU", gamemodes:{ DiaSMP:{score:0,tier:"LT5"} } }
 ];
 
 const rows = document.getElementById("rows");
@@ -719,7 +719,6 @@ overlay.addEventListener("click", () => {
 
 renderRows(players);
 
-// Dots animation lasts 1.6 sec total
 const dotFrames = [".", "..", "..."];
 let dotIndex = 0;
 
@@ -728,7 +727,6 @@ const dotInterval = setInterval(() => {
   dotIndex = (dotIndex + 1) % dotFrames.length;
 }, 533);
 
-// Overlay lasts 1.8 sec total
 window.addEventListener("load", () => {
   setTimeout(() => {
     clearInterval(dotInterval);
