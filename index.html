@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>ᴀᴢᴇɢᴏɴ ᴛɪᴇʀʟɪꜱᴛ</title>
 <style>
   * {
@@ -38,8 +38,8 @@
 
   .navbar {
     min-height: 78px;
-    background: rgba(10,18,31,0.85);
-    border: 1px solid rgba(75,104,152,0.16);
+    background: rgba(10, 18, 31, 0.85);
+    border: 1px solid rgba(75, 104, 152, 0.16);
     border-radius: 22px;
     display: flex;
     align-items: center;
@@ -60,12 +60,12 @@
     font-weight: 900;
     letter-spacing: -0.04em;
     color: #f7c35f;
-    text-shadow: 0 2px 18px rgba(255,174,0,0.18);
+    text-shadow: 0 2px 18px rgba(255, 174, 0, 0.18);
     flex: 1 1 auto;
   }
 
   .search-box {
-    background: rgba(23,34,54,0.9);
+    background: rgba(23, 34, 54, 0.9);
     border: 1px solid rgba(255,255,255,0.06);
     border-radius: 18px;
     padding: 12px 18px;
@@ -92,8 +92,8 @@
     min-width: 118px;
     height: 82px;
     border-radius: 24px 24px 0 0;
-    background: rgba(10,18,31,0.78);
-    border: 1px solid rgba(75,104,152,0.16);
+    background: rgba(10, 18, 31, 0.78);
+    border: 1px solid rgba(75, 104, 152, 0.16);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -124,8 +124,8 @@
 
   .panel,
   .top-panel {
-    background: rgba(8,15,28,0.88);
-    border: 1px solid rgba(75,104,152,0.16);
+    background: rgba(8, 15, 28, 0.88);
+    border: 1px solid rgba(75, 104, 152, 0.16);
     border-radius: 24px;
     padding: 18px;
     box-shadow: 0 16px 50px rgba(0,0,0,0.3);
@@ -146,7 +146,7 @@
   }
 
   .info-btn {
-    background: rgba(34,51,82,0.95);
+    background: rgba(34, 51, 82, 0.95);
     color: #fff;
     border: 1px solid rgba(255,255,255,0.06);
     padding: 12px 18px;
@@ -156,9 +156,10 @@
     cursor: pointer;
   }
 
-  .table-header, .player-row {
+  .table-header,
+  .player-row {
     display: grid;
-    grid-template-columns: 2fr 0.8fr 1fr 1fr 1fr;
+    grid-template-columns: 2fr 0.8fr 1fr 1fr 1fr 1fr;
     align-items: center;
     gap: 12px;
     padding: 8px 12px;
@@ -202,8 +203,8 @@
   }
 
   .username-box.silver-text {
-    color: #7f8c99;
-    text-shadow: 0 0 14px rgba(127, 140, 153, 0.22);
+    color: #8b949e;
+    text-shadow: 0 0 14px rgba(139, 148, 158, 0.22);
   }
 
   .username-box.bronze-text {
@@ -429,6 +430,7 @@
     .player-row > div:nth-child(3)::before { content: "Region"; }
     .player-row > div:nth-child(4)::before { content: "Sword"; }
     .player-row > div:nth-child(5)::before { content: "DiaSMP"; }
+    .player-row > div:nth-child(6)::before { content: "Mace"; }
 
     .username-box {
       flex: 1;
@@ -501,8 +503,9 @@
 
   <div class="tabs">
     <div class="tab active" data-mode="overall">🏆 Overall</div>
-    <div class="tab" data-mode="sword">⚔️ Sword</div>
-    <div class="tab" data-mode="smp">🟢 SMP</div>
+    <div class="tab" data-mode="sword">Sword</div>
+    <div class="tab" data-mode="smp">SMP</div>
+    <div class="tab" data-mode="mace">Mace</div>
   </div>
 
   <div class="main-grid">
@@ -517,6 +520,7 @@
         <div>Region</div>
         <div>Sword Tier</div>
         <div>DiaSMP Tier</div>
+        <div>Mace Tier</div>
       </div>
 
       <div class="rows" id="rows"></div>
@@ -581,10 +585,16 @@ const tierOrder = {
   "": 0
 };
 
+function getTierValue(tier) {
+  return tierOrder[tier] || 0;
+}
+
 function getBestTierValue(player) {
-  const swordTier = player.SwordTier || "Unranked";
-  const smpTier = player.SMPtier || "Unranked";
-  return Math.max(tierOrder[swordTier] || 0, tierOrder[smpTier] || 0);
+  return Math.max(
+    getTierValue(player.SwordTier),
+    getTierValue(player.SMPtier),
+    getTierValue(player.MaceTier)
+  );
 }
 
 function getRenderedPlayers(list) {
@@ -593,6 +603,7 @@ function getRenderedPlayers(list) {
       let totalScore = 0;
       let SwordTier = "Unranked";
       let SMPtier = "Unranked";
+      let MaceTier = "Unranked";
 
       if(player.gamemodes.Sword){
         totalScore += player.gamemodes.Sword.score;
@@ -604,32 +615,51 @@ function getRenderedPlayers(list) {
         SMPtier = player.gamemodes.DiaSMP.tier;
       }
 
+      if(player.gamemodes.Mace){
+        totalScore += player.gamemodes.Mace.score;
+        MaceTier = player.gamemodes.Mace.tier;
+      }
+
       return {
         username: player.username,
         region: player.region,
         totalScore,
         SwordTier,
-        SMPtier
+        SMPtier,
+        MaceTier
       };
     }
 
-    else if(currentMode === "sword" && player.gamemodes.Sword){
+    if(currentMode === "sword" && player.gamemodes.Sword){
       return {
         username: player.username,
         region: player.region,
         totalScore: player.gamemodes.Sword.score,
         SwordTier: player.gamemodes.Sword.tier,
-        SMPtier: "Unranked"
+        SMPtier: "—",
+        MaceTier: "—"
       };
     }
 
-    else if(currentMode === "smp" && player.gamemodes.DiaSMP){
+    if(currentMode === "smp" && player.gamemodes.DiaSMP){
       return {
         username: player.username,
         region: player.region,
         totalScore: player.gamemodes.DiaSMP.score,
-        SwordTier: "Unranked",
-        SMPtier: player.gamemodes.DiaSMP.tier
+        SwordTier: "—",
+        SMPtier: player.gamemodes.DiaSMP.tier,
+        MaceTier: "—"
+      };
+    }
+
+    if(currentMode === "mace" && player.gamemodes.Mace){
+      return {
+        username: player.username,
+        region: player.region,
+        totalScore: player.gamemodes.Mace.score,
+        SwordTier: "—",
+        SMPtier: "—",
+        MaceTier: player.gamemodes.Mace.tier
       };
     }
 
@@ -650,9 +680,6 @@ function renderTopScorers(list) {
   topScorers.innerHTML = "";
 
   top3.forEach((player, index) => {
-    const swordTier = player.SwordTier || "Unranked";
-    const smpTier = player.SMPtier || "Unranked";
-
     const card = document.createElement("div");
     card.className = `podium-card ${classes[index]}`;
     card.innerHTML = `
@@ -660,8 +687,9 @@ function renderTopScorers(list) {
       <div class="podium-name">${player.username}</div>
       <div class="podium-score">Score: ${player.totalScore}</div>
       <div class="podium-modes">
-        <div class="podium-mode">${swordTier} Sword</div>
-        <div class="podium-mode">${smpTier} SMP</div>
+        <div class="podium-mode">${player.SwordTier} Sword</div>
+        <div class="podium-mode">${player.SMPtier} SMP</div>
+        <div class="podium-mode">${player.MaceTier} Mace</div>
       </div>
     `;
     topScorers.appendChild(card);
@@ -688,6 +716,7 @@ function renderRows(list) {
       <div>${player.region}</div>
       <div>${player.SwordTier}</div>
       <div>${player.SMPtier}</div>
+      <div>${player.MaceTier}</div>
     `;
     rows.appendChild(row);
   });
@@ -707,7 +736,7 @@ tabs.forEach(tab => {
   tab.addEventListener("click", () => {
     tabs.forEach(t => t.classList.remove("active"));
     tab.classList.add("active");
-    currentMode = tab.getAttribute("data-mode");
+    currentMode = tab.dataset.mode;
     renderRows(players);
   });
 });
@@ -716,27 +745,25 @@ document.getElementById("infoBtn").addEventListener("click", () => {
   overlay.style.display = "flex";
 });
 
-overlay.addEventListener("click", () => {
-  overlay.style.display = "none";
+overlay.addEventListener("click", (e) => {
+  if (e.target === overlay) {
+    overlay.style.display = "none";
+  }
 });
 
-renderRows(players);
-
-const dotFrames = [".", "..", "..."];
-let dotIndex = 0;
-
+let dotCount = 1;
 const dotInterval = setInterval(() => {
-  loadingDots.textContent = dotFrames[dotIndex];
-  dotIndex = (dotIndex + 1) % dotFrames.length;
+  dotCount = dotCount % 3 + 1;
+  loadingDots.textContent = ".".repeat(dotCount);
 }, 533);
 
-window.addEventListener("load", () => {
-  setTimeout(() => {
-    clearInterval(dotInterval);
-    app.classList.add("loaded");
-    loadingOverlay.classList.add("hide");
-  }, 1800);
-});
+setTimeout(() => {
+  clearInterval(dotInterval);
+  loadingOverlay.classList.add("hide");
+  app.classList.add("loaded");
+}, 1800);
+
+renderRows(players);
 </script>
 </body>
 </html>
