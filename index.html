@@ -24,7 +24,7 @@
   }
 
   .app {
-    max-width: 1600px;
+    max-width: 1700px;
     margin: 0 auto;
     filter: blur(10px);
     opacity: 0.5;
@@ -47,21 +47,46 @@
     padding: 18px 22px;
     box-shadow: 0 12px 40px rgba(0,0,0,0.28);
     backdrop-filter: blur(14px);
-    margin-bottom: 30px;
+    margin-bottom: 26px;
     gap: 16px;
     flex-wrap: wrap;
   }
 
-  .brand {
+  .nav-left {
     display: flex;
     align-items: center;
-    gap: 12px;
-    font-size: 1.8rem;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+
+  .brand {
+    font-size: 1.7rem;
     font-weight: 900;
     letter-spacing: -0.04em;
     color: #f7c35f;
-    text-shadow: 0 2px 18px rgba(255, 174, 0, 0.18);
-    flex: 1 1 auto;
+    text-shadow: 0 2px 18px rgba(255,174,0,0.18);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .nav-link {
+    color: #7f8da3;
+    font-weight: 800;
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 10px 14px;
+    border-radius: 14px;
+    transition: 0.2s ease;
+  }
+
+  .nav-link.active,
+  .nav-link:hover {
+    color: #fff;
+    background: rgba(255,255,255,0.04);
   }
 
   .search-box {
@@ -104,7 +129,6 @@
     font-size: 0.95rem;
     transition: 0.18s ease;
     cursor: pointer;
-    position: relative;
     box-shadow: inset 0 -12px 30px rgba(255,255,255,0.015);
     flex-shrink: 0;
   }
@@ -113,6 +137,14 @@
     color: #ffffff;
     border-color: rgba(255,255,255,0.1);
     box-shadow: inset 0 -1px 0 #ffffff;
+  }
+
+  .page {
+    display: none;
+  }
+
+  .page.active {
+    display: block;
   }
 
   .main-grid {
@@ -194,23 +226,11 @@
     border-radius: 12px;
     padding: 10px 14px;
     background: rgba(255,255,255,0.03);
-    transition: 0.2s ease;
   }
 
-  .username-box.gold-text {
-    color: #ffd84d;
-    text-shadow: 0 0 14px rgba(255, 216, 77, 0.25);
-  }
-
-  .username-box.silver-text {
-    color: #8b949e;
-    text-shadow: 0 0 14px rgba(139, 148, 158, 0.22);
-  }
-
-  .username-box.bronze-text {
-    color: #c5976c;
-    text-shadow: 0 0 14px rgba(197, 151, 108, 0.18);
-  }
+  .username-box.gold-text { color: #ffd84d; }
+  .username-box.silver-text { color: #8b949e; }
+  .username-box.bronze-text { color: #c5976c; }
 
   .rank-box {
     font-weight: 700;
@@ -235,15 +255,24 @@
     border-radius: 20px;
     padding: 16px 18px;
     border: 1px solid rgba(255,255,255,0.06);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+  }
+
+  .gold {
+    background: linear-gradient(135deg, rgba(255, 214, 72, 0.22), rgba(161, 117, 0, 0.16));
+  }
+
+  .silver {
+    background: linear-gradient(135deg, rgba(127, 140, 153, 0.22), rgba(93, 104, 116, 0.16));
+  }
+
+  .bronze {
+    background: linear-gradient(135deg, rgba(184, 133, 94, 0.22), rgba(115, 74, 42, 0.16));
   }
 
   .podium-rank {
     font-size: 0.82rem;
     font-weight: 900;
-    opacity: 0.9;
     margin-bottom: 8px;
-    letter-spacing: 0.08em;
     text-transform: uppercase;
   }
 
@@ -256,39 +285,61 @@
   .podium-score {
     font-size: 0.96rem;
     font-weight: 700;
-    opacity: 0.92;
     margin-bottom: 10px;
-  }
-
-  .podium-modes {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
   }
 
   .podium-mode {
     font-size: 0.88rem;
     font-weight: 800;
-    opacity: 0.92;
     padding: 8px 10px;
     border-radius: 12px;
     background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.04);
+    margin-bottom: 6px;
   }
 
-  .gold {
-    background: linear-gradient(135deg, rgba(255, 214, 72, 0.22), rgba(161, 117, 0, 0.16));
-    border-color: rgba(255, 215, 0, 0.24);
+  /* Rankings Board */
+  .ranking-board {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 14px;
   }
 
-  .silver {
-    background: linear-gradient(135deg, rgba(127, 140, 153, 0.22), rgba(93, 104, 116, 0.16));
-    border-color: rgba(127, 140, 153, 0.22);
+  .tier-column {
+    background: rgba(8, 15, 28, 0.88);
+    border: 1px solid rgba(75, 104, 152, 0.16);
+    border-radius: 24px;
+    overflow: hidden;
+    min-height: 500px;
   }
 
-  .bronze {
-    background: linear-gradient(135deg, rgba(184, 133, 94, 0.22), rgba(115, 74, 42, 0.16));
-    border-color: rgba(181, 125, 82, 0.2);
+  .tier-header {
+    padding: 18px;
+    font-size: 1.8rem;
+    font-weight: 900;
+    text-align: center;
+  }
+
+  .tier-1 .tier-header { background: rgba(255, 183, 0, 0.28); color: #ffbc1f; }
+  .tier-2 .tier-header { background: rgba(148, 158, 171, 0.25); color: #b6c0cb; }
+  .tier-3 .tier-header { background: rgba(168, 98, 48, 0.25); color: #da9155; }
+  .tier-4 .tier-header { background: rgba(40, 56, 84, 0.4); color: #c8d3e3; }
+  .tier-5 .tier-header { background: rgba(40, 56, 84, 0.4); color: #c8d3e3; }
+
+  .tier-list {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .tier-player {
+    background: rgba(43, 57, 81, 0.8);
+    border-radius: 14px;
+    padding: 12px 14px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 
   .overlay {
@@ -353,7 +404,6 @@
     font-size: 1.2rem;
     font-weight: 800;
     color: #f3f6fc;
-    letter-spacing: 0.03em;
   }
 
   .dots {
@@ -367,41 +417,18 @@
     100% { transform: rotate(360deg); }
   }
 
+  @media (max-width: 1200px) {
+    .ranking-board {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
   @media (max-width: 900px) {
-    body {
-      padding: 14px;
-    }
-
-    .main-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .top-panel {
-      width: 100%;
-    }
-
-    .search-box {
-      width: 100%;
-      min-width: 0;
-    }
-
-    .brand {
-      width: 100%;
-      font-size: 1.45rem;
-      justify-content: center;
-      text-align: center;
-    }
-
-    .navbar {
-      flex-direction: column;
-      align-items: stretch;
-      padding: 18px;
-    }
-
-    .table-header {
-      display: none;
-    }
-
+    body { padding: 14px; }
+    .main-grid { grid-template-columns: 1fr; }
+    .search-box { width: 100%; min-width: 0; }
+    .navbar { flex-direction: column; align-items: stretch; padding: 18px; }
+    .table-header { display: none; }
     .player-row {
       display: flex;
       flex-direction: column;
@@ -409,76 +436,24 @@
       padding: 16px;
       border-radius: 18px;
     }
-
     .player-row > div {
       width: 100%;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 14px;
-      font-size: 0.95rem;
     }
-
     .player-row > div::before {
       font-weight: 800;
       color: #7f8da3;
       min-width: 95px;
     }
-
     .player-row > div:nth-child(1)::before { content: "Username"; }
     .player-row > div:nth-child(2)::before { content: "Score"; }
     .player-row > div:nth-child(3)::before { content: "Region"; }
     .player-row > div:nth-child(4)::before { content: "Sword"; }
     .player-row > div:nth-child(5)::before { content: "DiaSMP"; }
     .player-row > div:nth-child(6)::before { content: "Mace"; }
-
-    .username-box {
-      flex: 1;
-      justify-content: flex-end;
-      text-align: right;
-    }
-
-    .rank-box {
-      text-align: right;
-      width: auto;
-    }
-
-    .loading-box {
-      min-width: 0;
-      width: 90%;
-      max-width: 320px;
-    }
-
-    .overlay-content {
-      font-size: 1rem;
-      padding: 20px;
-    }
-  }
-
-  @media (max-width: 500px) {
-    .brand {
-      font-size: 1.25rem;
-    }
-
-    .tab {
-      min-width: 100px;
-      height: 72px;
-      font-size: 0.9rem;
-    }
-
-    .podium-name {
-      font-size: 1rem;
-    }
-
-    .podium-score,
-    .podium-mode {
-      font-size: 0.85rem;
-    }
-
-    .info-btn {
-      width: 100%;
-      text-align: center;
-    }
+    .ranking-board { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -495,40 +470,85 @@
 
 <div class="app" id="app">
   <div class="navbar">
-    <div class="brand">
-      <span>ᴀᴢᴇɢᴏɴ ᴛɪᴇʀʟɪꜱᴛ</span>
+    <div class="nav-left">
+      <div class="brand">ᴀᴢᴇɢᴏɴ ᴛɪᴇʀʟɪꜱᴛ</div>
+      <div class="nav-links">
+        <div class="nav-link active" data-page="home">Home</div>
+        <div class="nav-link" data-page="rankings">Rankings</div>
+      </div>
     </div>
     <input type="text" class="search-box" id="searchBox" placeholder="Search player..." />
   </div>
 
-  <div class="tabs">
-    <div class="tab active" data-mode="overall">🏆 Overall</div>
-    <div class="tab" data-mode="sword">Sword</div>
-    <div class="tab" data-mode="smp">SMP</div>
-    <div class="tab" data-mode="mace">Mace</div>
-  </div>
-
-  <div class="main-grid">
-    <div class="panel">
-      <div class="panel-top">
-        <button class="info-btn" id="infoBtn">ⓘ Information</button>
-      </div>
-
-      <div class="table-header">
-        <div>Username</div>
-        <div>Total Score</div>
-        <div>Region</div>
-        <div>Sword Tier</div>
-        <div>DiaSMP Tier</div>
-        <div>Mace Tier</div>
-      </div>
-
-      <div class="rows" id="rows"></div>
+  <!-- HOME PAGE -->
+  <div class="page active" id="homePage">
+    <div class="tabs">
+      <div class="tab active" data-mode="overall">🏆 Overall</div>
+      <div class="tab" data-mode="sword">Sword</div>
+      <div class="tab" data-mode="smp">SMP</div>
+      <div class="tab" data-mode="mace">Mace</div>
     </div>
 
-    <div class="top-panel">
-      <div class="top-title">Top Scorers</div>
-      <div class="podium" id="topScorers"></div>
+    <div class="main-grid">
+      <div class="panel">
+        <div class="panel-top">
+          <button class="info-btn" id="infoBtn">ⓘ Information</button>
+        </div>
+
+        <div class="table-header">
+          <div>Username</div>
+          <div>Total Score</div>
+          <div>Region</div>
+          <div>Sword Tier</div>
+          <div>DiaSMP Tier</div>
+          <div>Mace Tier</div>
+        </div>
+
+        <div class="rows" id="rows"></div>
+      </div>
+
+      <div class="top-panel">
+        <div class="top-title">Top Scorers</div>
+        <div class="podium" id="topScorers"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RANKINGS PAGE -->
+  <div class="page" id="rankingsPage">
+    <div class="tabs">
+      <div class="tab active ranking-tab" data-ranking-mode="sword">Sword</div>
+      <div class="tab ranking-tab" data-ranking-mode="smp">DiaSMP</div>
+      <div class="tab ranking-tab" data-ranking-mode="mace">Mace</div>
+    </div>
+
+    <div class="panel" style="border-radius:24px;">
+      <div class="panel-top">
+        <button class="info-btn">ⓘ Information</button>
+      </div>
+
+      <div class="ranking-board">
+        <div class="tier-column tier-1">
+          <div class="tier-header">🏆 Tier 1</div>
+          <div class="tier-list" id="tier1"></div>
+        </div>
+        <div class="tier-column tier-2">
+          <div class="tier-header">🏆 Tier 2</div>
+          <div class="tier-list" id="tier2"></div>
+        </div>
+        <div class="tier-column tier-3">
+          <div class="tier-header">🏆 Tier 3</div>
+          <div class="tier-list" id="tier3"></div>
+        </div>
+        <div class="tier-column tier-4">
+          <div class="tier-header">Tier 4</div>
+          <div class="tier-list" id="tier4"></div>
+        </div>
+        <div class="tier-column tier-5">
+          <div class="tier-header">Tier 5</div>
+          <div class="tier-list" id="tier5"></div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -559,30 +579,26 @@ const players = [
   { username: "sugodo", region:"EU", gamemodes:{ DiaSMP:{score:0,tier:"HT5"} } }
 ];
 
-const rows = document.getElementById("rows");
-const searchBox = document.getElementById("searchBox");
-const tabs = document.querySelectorAll(".tab");
-const overlay = document.getElementById("overlay");
-const app = document.getElementById("app");
-const loadingOverlay = document.getElementById("loadingOverlay");
-const loadingDots = document.getElementById("loadingDots");
-const topScorers = document.getElementById("topScorers");
+const tierOrder = {
+  "HT1": 10, "LT1": 9,
+  "HT2": 8, "LT2": 7,
+  "HT3": 6, "LT3": 5,
+  "HT4": 4, "LT4": 3,
+  "HT5": 2, "LT5": 1,
+  "Unranked": 0, "—": 0, "": 0
+};
 
 let currentMode = "overall";
+let currentRankingMode = "sword";
 
-const tierOrder = {
-  "HT1": 10,
-  "LT1": 9,
-  "HT2": 8,
-  "LT2": 7,
-  "HT3": 6,
-  "LT3": 5,
-  "HT4": 4,
-  "LT4": 3,
-  "HT5": 2,
-  "LT5": 1,
-  "Unranked": 0,
-  "": 0
+const rows = document.getElementById("rows");
+const topScorers = document.getElementById("topScorers");
+const searchBox = document.getElementById("searchBox");
+const tabs = document.querySelectorAll(".tab[data-mode]");
+const navLinks = document.querySelectorAll(".nav-link");
+const pages = {
+  home: document.getElementById("homePage"),
+  rankings: document.getElementById("rankingsPage")
 };
 
 function getTierValue(tier) {
@@ -609,74 +625,48 @@ function getRenderedPlayers(list) {
         totalScore += player.gamemodes.Sword.score;
         SwordTier = player.gamemodes.Sword.tier;
       }
-
       if(player.gamemodes.DiaSMP){
         totalScore += player.gamemodes.DiaSMP.score;
         SMPtier = player.gamemodes.DiaSMP.tier;
       }
-
       if(player.gamemodes.Mace){
         totalScore += player.gamemodes.Mace.score;
         MaceTier = player.gamemodes.Mace.tier;
       }
 
-      return {
-        username: player.username,
-        region: player.region,
-        totalScore,
-        SwordTier,
-        SMPtier,
-        MaceTier
-      };
+      return { username: player.username, region: player.region, totalScore, SwordTier, SMPtier, MaceTier };
     }
 
     if(currentMode === "sword" && player.gamemodes.Sword){
-      return {
-        username: player.username,
-        region: player.region,
-        totalScore: player.gamemodes.Sword.score,
-        SwordTier: player.gamemodes.Sword.tier,
-        SMPtier: "—",
-        MaceTier: "—"
-      };
+      return { username: player.username, region: player.region, totalScore: player.gamemodes.Sword.score, SwordTier: player.gamemodes.Sword.tier, SMPtier: "—", MaceTier: "—" };
     }
 
     if(currentMode === "smp" && player.gamemodes.DiaSMP){
-      return {
-        username: player.username,
-        region: player.region,
-        totalScore: player.gamemodes.DiaSMP.score,
-        SwordTier: "—",
-        SMPtier: player.gamemodes.DiaSMP.tier,
-        MaceTier: "—"
-      };
+      return { username: player.username, region: player.region, totalScore: player.gamemodes.DiaSMP.score, SwordTier: "—", SMPtier: player.gamemodes.DiaSMP.tier, MaceTier: "—" };
     }
 
     if(currentMode === "mace" && player.gamemodes.Mace){
-      return {
-        username: player.username,
-        region: player.region,
-        totalScore: player.gamemodes.Mace.score,
-        SwordTier: "—",
-        SMPtier: "—",
-        MaceTier: player.gamemodes.Mace.tier
-      };
+      return { username: player.username, region: player.region, totalScore: player.gamemodes.Mace.score, SwordTier: "—", SMPtier: "—", MaceTier: player.gamemodes.Mace.tier };
     }
 
     return null;
   }).filter(Boolean).sort((a, b) => {
-    if (b.totalScore !== a.totalScore) {
-      return b.totalScore - a.totalScore;
-    }
+    if (b.totalScore !== a.totalScore) return b.totalScore - a.totalScore;
     return getBestTierValue(b) - getBestTierValue(a);
   });
+}
+
+function getUsernameClass(index) {
+  if(index === 0) return "gold-text";
+  if(index === 1) return "silver-text";
+  if(index === 2) return "bronze-text";
+  return "";
 }
 
 function renderTopScorers(list) {
   const top3 = list.slice(0, 3);
   const classes = ["gold", "silver", "bronze"];
   const labels = ["#1 Top Scorer", "#2 Top Scorer", "#3 Top Scorer"];
-
   topScorers.innerHTML = "";
 
   top3.forEach((player, index) => {
@@ -686,21 +676,12 @@ function renderTopScorers(list) {
       <div class="podium-rank">${labels[index]}</div>
       <div class="podium-name">${player.username}</div>
       <div class="podium-score">Score: ${player.totalScore}</div>
-      <div class="podium-modes">
-        <div class="podium-mode">${player.SwordTier} Sword</div>
-        <div class="podium-mode">${player.SMPtier} SMP</div>
-        <div class="podium-mode">${player.MaceTier} Mace</div>
-      </div>
+      <div class="podium-mode">${player.SwordTier} Sword</div>
+      <div class="podium-mode">${player.SMPtier} SMP</div>
+      <div class="podium-mode">${player.MaceTier} Mace</div>
     `;
     topScorers.appendChild(card);
   });
-}
-
-function getUsernameClass(index) {
-  if(index === 0) return "gold-text";
-  if(index === 1) return "silver-text";
-  if(index === 2) return "bronze-text";
-  return "";
 }
 
 function renderRows(list) {
@@ -724,11 +705,39 @@ function renderRows(list) {
   renderTopScorers(filtered);
 }
 
+function renderRankingBoard(mode) {
+  document.getElementById("tier1").innerHTML = "";
+  document.getElementById("tier2").innerHTML = "";
+  document.getElementById("tier3").innerHTML = "";
+  document.getElementById("tier4").innerHTML = "";
+  document.getElementById("tier5").innerHTML = "";
+
+  const modeMap = {
+    sword: "Sword",
+    smp: "DiaSMP",
+    mace: "Mace"
+  };
+
+  const game = modeMap[mode];
+
+  const filtered = players.filter(p => p.gamemodes[game]);
+
+  filtered.forEach(player => {
+    const tier = player.gamemodes[game].tier;
+    const tierNumber = tier.replace(/[A-Z]/g, "").replace(/[a-z]/g, "");
+    const target = document.getElementById(`tier${tierNumber}`);
+    if(target) {
+      const div = document.createElement("div");
+      div.className = "tier-player";
+      div.innerHTML = `<span>${player.username}</span><span>${tier}</span>`;
+      target.appendChild(div);
+    }
+  });
+}
+
 searchBox.addEventListener("input", () => {
   const value = searchBox.value.toLowerCase();
-  const filtered = players.filter(player =>
-    player.username.toLowerCase().includes(value)
-  );
+  const filtered = players.filter(player => player.username.toLowerCase().includes(value));
   renderRows(filtered);
 });
 
@@ -741,29 +750,50 @@ tabs.forEach(tab => {
   });
 });
 
-document.getElementById("infoBtn").addEventListener("click", () => {
-  overlay.style.display = "flex";
+document.querySelectorAll(".ranking-tab").forEach(tab => {
+  tab.addEventListener("click", () => {
+    document.querySelectorAll(".ranking-tab").forEach(t => t.classList.remove("active"));
+    tab.classList.add("active");
+    currentRankingMode = tab.dataset.rankingMode;
+    renderRankingBoard(currentRankingMode);
+  });
 });
 
-overlay.addEventListener("click", (e) => {
-  if (e.target === overlay) {
-    overlay.style.display = "none";
+navLinks.forEach(link => {
+  link.addEventListener("click", () => {
+    navLinks.forEach(l => l.classList.remove("active"));
+    link.classList.add("active");
+
+    const page = link.dataset.page;
+    Object.values(pages).forEach(p => p.classList.remove("active"));
+    pages[page].classList.add("active");
+  });
+});
+
+document.getElementById("infoBtn").addEventListener("click", () => {
+  document.getElementById("overlay").style.display = "flex";
+});
+
+document.getElementById("overlay").addEventListener("click", (e) => {
+  if (e.target.id === "overlay") {
+    document.getElementById("overlay").style.display = "none";
   }
 });
 
 let dotCount = 1;
 const dotInterval = setInterval(() => {
   dotCount = dotCount % 3 + 1;
-  loadingDots.textContent = ".".repeat(dotCount);
+  document.getElementById("loadingDots").textContent = ".".repeat(dotCount);
 }, 533);
 
 setTimeout(() => {
   clearInterval(dotInterval);
-  loadingOverlay.classList.add("hide");
-  app.classList.add("loaded");
+  document.getElementById("loadingOverlay").classList.add("hide");
+  document.getElementById("app").classList.add("loaded");
 }, 1800);
 
 renderRows(players);
+renderRankingBoard("sword");
 </script>
 </body>
 </html>
