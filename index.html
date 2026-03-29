@@ -486,7 +486,6 @@
     <input type="text" class="search-box" id="searchBox" placeholder="Search player..." />
   </div>
 
-  <!-- HOME PAGE -->
   <div class="page active" id="homePage">
     <div class="tabs">
       <div class="tab active" data-mode="overall">🏆 Overall</div>
@@ -520,7 +519,6 @@
     </div>
   </div>
 
-  <!-- RANKINGS PAGE -->
   <div class="page" id="rankingsPage">
     <div class="tabs">
       <div class="tab active ranking-tab" data-ranking-mode="sword">Sword</div>
@@ -575,7 +573,8 @@ const players = [
   { username: "karru094gg", region:"EU", gamemodes:{ Sword:{score:20,tier:"LT3"}, DiaSMP:{score:2,tier:"LT3"} } },
   { username: "NOVAL_MC", region:"AS", gamemodes:{ Sword:{score:16,tier:"HT4"} } },
   { username: "ShifTide", region:"AS", gamemodes:{ DiaSMP:{score:8,tier:"HT4"} } },
-  { username: "Pandboid", region:"EU", gamemodes:{ DiaSMP:{score:7,tier:"LT3"} } },
+  { username: "panboid", region:"EU", gamemodes:{ DiaSMP:{score:7,tier:"LT3"} } },
+  { username: "voidXDDD", region:"EU", gamemodes:{ Mace:{score:5,tier:"LT3"}, DiaSMP:{score:0,tier:"HT4"} } },
   { username: "showthemeadil", region:"EU", gamemodes:{ Sword:{score:3,tier:"HT5"} } },
   { username: "Lakerekn", region:"AS", gamemodes:{ DiaSMP:{score:0,tier:"HT5"} } },
   { username: "ryf_t", region:"AS", gamemodes:{ DiaSMP:{score:0,tier:"LT4"} } },
@@ -583,7 +582,8 @@ const players = [
   { username: "cantstunslam123", region:"EU", gamemodes:{ DiaSMP:{score:0,tier:"LT5"} } },
   { username: "Superjustplayz", region:"AS", gamemodes:{ Sword:{score:0,tier:"LT5"} } },
   { username: "datminecrafter1", region:"EU", gamemodes:{ DiaSMP:{score:0,tier:"LT5"} } },
-  { username: "sugodo", region:"EU", gamemodes:{ DiaSMP:{score:0,tier:"HT5"} } }
+  { username: "sugodo", region:"EU", gamemodes:{ DiaSMP:{score:0,tier:"HT5"} } },
+  { username: "ResplinYT_", region:"EU", gamemodes:{ Mace:{score:0,tier:"LT5"} } }
 ];
 
 const tierOrder = {
@@ -728,6 +728,10 @@ function renderRankingBoard(mode) {
   const game = modeMap[mode];
   const filtered = players.filter(p => p.gamemodes[game]);
 
+  filtered.sort((a, b) => {
+    return getTierValue(b.gamemodes[game].tier) - getTierValue(a.gamemodes[game].tier);
+  });
+
   filtered.forEach(player => {
     const tier = player.gamemodes[game].tier;
     const tierNumber = tier.replace(/[A-Z]/g, "").replace(/[a-z]/g, "");
@@ -776,7 +780,6 @@ navLinks.forEach(link => {
   });
 });
 
-/* FIXED INFO BUTTONS */
 document.querySelectorAll(".info-open").forEach(btn => {
   btn.addEventListener("click", () => {
     document.getElementById("overlay").style.display = "flex";
