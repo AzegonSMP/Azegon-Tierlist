@@ -229,7 +229,7 @@
   }
 
   .username-box.gold-text { color: #ffd84d; }
-  .username-box.silver-text { color: #8b949e; }
+  .username-box.silver-text { color: #8f96a3; }
   .username-box.bronze-text { color: #c5976c; }
 
   .rank-box {
@@ -297,7 +297,6 @@
     margin-bottom: 6px;
   }
 
-  /* Rankings Board */
   .ranking-board {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
@@ -429,6 +428,7 @@
     .search-box { width: 100%; min-width: 0; }
     .navbar { flex-direction: column; align-items: stretch; padding: 18px; }
     .table-header { display: none; }
+
     .player-row {
       display: flex;
       flex-direction: column;
@@ -436,24 +436,30 @@
       padding: 16px;
       border-radius: 18px;
     }
+
     .player-row > div {
       width: 100%;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
+
     .player-row > div::before {
       font-weight: 800;
       color: #7f8da3;
       min-width: 95px;
     }
+
     .player-row > div:nth-child(1)::before { content: "Username"; }
     .player-row > div:nth-child(2)::before { content: "Score"; }
     .player-row > div:nth-child(3)::before { content: "Region"; }
     .player-row > div:nth-child(4)::before { content: "Sword"; }
     .player-row > div:nth-child(5)::before { content: "DiaSMP"; }
     .player-row > div:nth-child(6)::before { content: "Mace"; }
-    .ranking-board { grid-template-columns: 1fr; }
+
+    .ranking-board {
+      grid-template-columns: 1fr;
+    }
   }
 </style>
 </head>
@@ -492,7 +498,7 @@
     <div class="main-grid">
       <div class="panel">
         <div class="panel-top">
-          <button class="info-btn" id="infoBtn">ⓘ Information</button>
+          <button class="info-btn info-open">ⓘ Information</button>
         </div>
 
         <div class="table-header">
@@ -524,7 +530,7 @@
 
     <div class="panel" style="border-radius:24px;">
       <div class="panel-top">
-        <button class="info-btn">ⓘ Information</button>
+        <button class="info-btn info-open">ⓘ Information</button>
       </div>
 
       <div class="ranking-board">
@@ -556,7 +562,8 @@
 <div class="overlay" id="overlay">
   <div class="overlay-content">
     Want To Tier Test? Join
-    <a href="https://discord.gg/zD6DkhGb5w" target="_blank" style="color:#f7c35f;">
+    <br><br>
+    <a href="https://discord.gg/zD6DkhGb5w" target="_blank" style="color:#f7c35f; font-weight:900;">
       https://discord.gg/zD6DkhGb5w
     </a>
   </div>
@@ -719,7 +726,6 @@ function renderRankingBoard(mode) {
   };
 
   const game = modeMap[mode];
-
   const filtered = players.filter(p => p.gamemodes[game]);
 
   filtered.forEach(player => {
@@ -770,8 +776,11 @@ navLinks.forEach(link => {
   });
 });
 
-document.getElementById("infoBtn").addEventListener("click", () => {
-  document.getElementById("overlay").style.display = "flex";
+/* FIXED INFO BUTTONS */
+document.querySelectorAll(".info-open").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.getElementById("overlay").style.display = "flex";
+  });
 });
 
 document.getElementById("overlay").addEventListener("click", (e) => {
